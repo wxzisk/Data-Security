@@ -1,0 +1,4 @@
+/home/wxz/my_test_codes/sha256-512/CMakeFiles/edit_cache.dir
+/home/wxz/my_test_codes/sha256-512/CMakeFiles/rebuild_cache.dir
+/home/wxz/my_test_codes/sha256-512/CMakeFiles/sha.dir
+/home/wxz/my_test_codes/sha256-512/CMakeFiles/sha512.dir
