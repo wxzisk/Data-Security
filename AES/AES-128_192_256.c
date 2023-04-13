@@ -231,8 +231,6 @@ int main(int argc, char *argv[])
 
     uint8_t* keystr = malloc(lk);
 
-    // printf("Enter your key (string): ");
-    // scanf("%[^\n]%*c", keystr);
     if(lk == 16) memcpy(keystr, key_128,sizeof(key_128));
     else if(lk == 24) memcpy(keystr, key_192,sizeof(key_192));
     else memcpy(keystr, key_256,sizeof(key_256));
@@ -341,10 +339,7 @@ int main(int argc, char *argv[])
 
 
     // take input
-    char *input = malloc(50);
-    printf("Input file: ");
-    scanf("%s", input);
-
+    char *input = "16k.txt";
     FILE *file = fopen(input, "r");
 
     if (!file) // check for invalidity
@@ -404,21 +399,8 @@ int main(int argc, char *argv[])
     FILE *output = NULL;
 
     // output file
-    if (strcmp(argv[1], "encrypt") == 0)
-    {
-        printf("Choose a name for the output file. The ciphertext file won't be readable, you don't have to choose a format (but you can anyway). \n");
-    }
-
-    if (strcmp(argv[1], "decrypt") == 0)
-    {
-        printf("Write the name of your output file. Don't forget to precise the format (same one as the initial file) such as file.txt, or file.bmp, etc. \n");
-    }
-
-    char *ctname = malloc(50);
-    printf("Output file: ");
-    scanf("%s", ctname);
+    char *ctname = "result.txt";
     output = fopen(ctname, "w");
-
 
 
     // AES
@@ -433,26 +415,15 @@ int main(int argc, char *argv[])
         }
         fclose(output);
 
-        // let user choose for hex ouput.
-        char answer;
-        printf("Do you also want to print the ouput in hex values ? y/n : ");
-        scanf(" %c", &answer);
-        if (tolower(answer) == 'y')
+        printf("The first line of Ciphertext(hex) : ");
+        for (int i = 0; i < 4; i++)
         {
-            printf(" Ciphertext(hex) : ");
-            for (int w = 0; w < nb; w++)
+            for (int j = 0; j < 4; j++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        printf("%x ", outputarray[w][i][j]);
-                    }
-                }
-                printf("\n");
+                printf("%x ", outputarray[0][i][j]);
             }
-            printf("\n");
         }
+        printf("\n");
     }
 
     if (strcmp(argv[1], "decrypt") == 0)
@@ -465,33 +436,20 @@ int main(int argc, char *argv[])
             printf("File write error.");
         }
         fclose(output);
-
-        // let user choose for hex ouput.
-        char answer2;
-        printf("Do you also want to print the ouput in hex values ? y/n : ");
-        scanf(" %c", &answer2);
-        if (tolower(answer2) == 'y')
+        
+        printf("The first line of Plaintext(hex) : ");
+        for (int i = 0; i < 4; i++)
         {
-            printf(" Plaintext(hex) : ");
-            for (int w = 0; w < nb; w++)
+            for (int j = 0; j < 4; j++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        printf("%x ", outputarray[w][i][j]);
-                    }
-                }
-                printf("\n");
+                printf("%x ", outputarray[0][i][j]);
             }
-            printf("\n");
         }
-
+        printf("\n");
     }
 
-    free(input);
     free(keystr);
-    free(ctname);
+
 
     return 0;
 }

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 #include "SHA512.h"
 #include "SHA256.h"
 
@@ -57,19 +57,27 @@ void getChecksum(char *filename)
     
     if (progMode & MODE_512)
     {
+        clock_t start;
+        clock_t end;
+        start = clock();
         uint64_t *checksum = SHA512Hash((uint8_t*)fileContents, fileSize);
+        end = clock();
         for (int i = 0; i < HASH_ARRAY_LEN; ++i)
             printf("%016" PRIx64 , checksum[i]);
-        printf("\n");
+        printf("\nTime Cost(without IO):%f\n", ((double)end - start) / CLOCKS_PER_SEC);
         free(checksum);
     }
 
     if (progMode & MODE_256)
     {
+        clock_t start;
+        clock_t end;
+        start = clock();
         uint32_t *checksum2 = SHA256Hash((uint8_t*)fileContents, fileSize);
+        end = clock();
         for (int i = 0; i < SHA256_ARRAY_LEN; ++i)
             printf("%08" PRIx32 , checksum2[i]);
-        printf("\n");
+        printf("\nTime Cost(without IO):%f\n", ((double)end - start) / CLOCKS_PER_SEC);
         free(checksum2);
     }
     
@@ -105,25 +113,25 @@ void hashInput(int argc, int inputPos, char **argv)
     }
     argStr[inputLen - 1] = '\0';
     
-    // Calculate a hash of argStr
-    if (progMode & MODE_512)
-    {
-        uint64_t *argHash = SHA512Hash((uint8_t*)argStr, strlen(argStr));
-        printf("SHA-512 hash of command line input: \n");
-        for (int i = 0; i < HASH_ARRAY_LEN; ++i)
-            printf("%016" PRIx64 , argHash[i]);
-        printf("\n");
-        free(argHash);
-    }
-    if (progMode & MODE_256)
-    {
-        uint32_t *argHash2 = SHA256Hash((uint8_t*)&argStr[0], strlen(argStr));
-        printf("SHA-256 hash of command line input: \n");
-        for (int i = 0; i < SHA256_ARRAY_LEN; ++i)
-            printf("%08" PRIx32 , argHash2[i]);
-        printf("\n");
-        free(argHash2);
-    }
+    // // Calculate a hash of argStr
+    // if (progMode & MODE_512)
+    // {
+    //     uint64_t *argHash = SHA512Hash((uint8_t*)argStr, strlen(argStr));
+    //     printf("SHA-512 hash of command line input: \n");
+    //     for (int i = 0; i < HASH_ARRAY_LEN; ++i)
+    //         printf("%016" PRIx64 , argHash[i]);
+    //     printf("\n");
+    //     free(argHash);
+    // }
+    // if (progMode & MODE_256)
+    // {
+    //     uint32_t *argHash2 = SHA256Hash((uint8_t*)&argStr[0], strlen(argStr));
+    //     printf("SHA-256 hash of command line input: \n");
+    //     for (int i = 0; i < SHA256_ARRAY_LEN; ++i)
+    //         printf("%08" PRIx32 , argHash2[i]);
+    //     printf("\n");
+    //     free(argHash2);
+    // }
     
     free(argStr);
 }
