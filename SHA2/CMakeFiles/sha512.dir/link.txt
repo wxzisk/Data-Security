@@ -1,2 +1,0 @@
-/usr/bin/ar qc libsha512.a  CMakeFiles/sha512.dir/SHA512.c.o CMakeFiles/sha512.dir/SHA256.c.o
-/usr/bin/ranlib libsha512.a

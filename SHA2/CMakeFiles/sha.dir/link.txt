@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/sha.dir/main.c.o  -o sha -rdynamic libsha512.a 
