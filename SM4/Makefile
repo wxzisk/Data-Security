@@ -1,2 +1,2 @@
 all:
-	gcc sm3.c -o sm3
+	gcc sm4.c -o sm4

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 #include <ctype.h>
+#include <time.h>
 
 typedef uint8_t BYTE;
 
@@ -250,7 +251,6 @@ int main(int argc, char *argv[])
             }
         }
 
-
         // formate keyinput into key array (it's roundkey for round 0, btw.)
         int count = 0;
         for (int i = 0; i < 4; i++)
@@ -410,7 +410,12 @@ int main(int argc, char *argv[])
     // AES
     if (strcmp(argv[1], "encrypt") == 0 || strcmp(argv[1], "check") == 0)
     {
+        clock_t start;
+        clock_t end;
+        start = clock();
         encrypt(mc, nb, lk, key, bytearray, outputarray, output);
+        end = clock();
+        printf("\nTime Cost(without IO):%f\n", ((double)end - start) / CLOCKS_PER_SEC);
 
         // write output file
         if (fwrite(outputarray, 1, nb * 4 * 4, output) != nb * 4 * 4)
