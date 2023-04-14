@@ -179,15 +179,15 @@ void decrypt(int mc, int nb, int lk, BYTE key[][4][4], BYTE bytearray[][4][4], B
 int main(int argc, char *argv[])
 {
     // error checking for arguments
-    if (argc != 3)
+    if (argc != 4)
     {
         fprintf(stderr,
-                "Need two command line arguments. 1 : choose between 'encrypt' or 'decrypt', 2 : choose your key length (128/192/256)\n");
+                "Need two command line arguments. 1 : choose between 'encrypt' or 'decrypt', 2 : choose your key length (128/192/256), 3 : choose your input file\n");
         return 1;
     }
 
 
-    if (strcmp(argv[1], "encrypt") != 0 && strcmp(argv[1], "decrypt") != 0)
+    if (strcmp(argv[1], "encrypt") != 0 && strcmp(argv[1], "decrypt") != 0 &&  strcmp(argv[1], "check") != 0)
     {
         fprintf(stderr, "Error. Choose between 'encrypt' or 'decrypt'.\n");
         return 2;
@@ -337,9 +337,8 @@ int main(int argc, char *argv[])
         }
     }
 
-
     // take input
-    char *input = "16k.txt";
+    char *input = argv[3];
     FILE *file = fopen(input, "r");
 
     if (!file) // check for invalidity
@@ -354,16 +353,20 @@ int main(int argc, char *argv[])
     fseek(file, 0, SEEK_SET);
     int s = size;
 
-
     // make it so I can separate size into 16B parts
     while (size % 16 != 0)
     {
         size++;
     }
 
+    // check model
+    if(strcmp(argv[1], "check") == 0)
+    {
+        size = 16;
+    }
+
     // blocks nb
     int nb = size / 16;
-
     // init input blocks
     BYTE bytearray[nb][4][4];
     // init output blocks
@@ -377,6 +380,7 @@ int main(int argc, char *argv[])
             for (int j = 0; j < 4; j++)
             {
                 bytearray[x][i][j] = ' ';
+
             }
         }
     }
@@ -404,7 +408,7 @@ int main(int argc, char *argv[])
 
 
     // AES
-    if (strcmp(argv[1], "encrypt") == 0)
+    if (strcmp(argv[1], "encrypt") == 0 || strcmp(argv[1], "check") == 0)
     {
         encrypt(mc, nb, lk, key, bytearray, outputarray, output);
 

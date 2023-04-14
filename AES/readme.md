@@ -14,21 +14,27 @@
   在check_algorithm.c文件中，我们将key和input放入AES标准库中加密，得到正确的密文。使用方法如下：
 
     ```
+    ./check_algorithm 
     Input:
-    32 43 f6 a8 88 5a 30 8d 31 31 98 a2 e0 37 07 34 
+    31 32 33 34 35 36 37 38 39 31 32 33 34 35 36 37 
     ----------------AES-128----------------
     OpenSSL Encrypted Output:
-    89 ed 5e 6a 05 ca 76 33 81 35 08 5f e2 1c 40 bd 
+    25 2b 4a dc d0 64 e9 49 29 f9 9c 46 c3 7f 9f 20 
     ----------------AES-192----------------
     OpenSSL Encrypted Output:
-    bc 3a aa b5 d9 7b aa 7b 32 5d 7b 8f 69 cd 7c a8 
+    cc 57 55 7d 97 3c c0 1b 8d d3 fd 8b b2 54 21 d3 
     ----------------AES-256----------------
     OpenSSL Encrypted Output:
-    9a 19 88 30 ff 9a 4e 39 ec 15 01 54 7d 4a 6b 1b
+    db 4f 1c 20 d6 52 02 c0 fe 51 3c 45 21 5b 23 a8
     ```
-    在AES-128_192_256.c文件中我们修改输入文件为"check.txt"，经过我们的加密算法得到密文。使用方法如下：
+    在AES-128_192_256.c文件中我们从输入文件"check.txt"中拿到明文，这和check_algorithm.c中的一样，经过我们的加密算法得到密文。可以运行make生成的可执行文件，或者使用我们提供的脚本。推荐使用python脚本，参数-m指操作类型包括加密/解密/验证正确性（encrypt/decrypt/check），参数-t指秘钥长度（128/192/256），参数-f指输入文件。使用方法如下：
     ```
-    
+    python test_byte.py -m check -t 128 -f check.txt
+    result: The first line of Ciphertext(hex) : 25 2b 4a dc d0 64 e9 49 29 f9 9c 46 c3 7f 9f 20
+    python test_byte.py -m check -t 192 -f check.txt
+    result: The first line of Ciphertext(hex) : cc 57 55 7d 97 3c c0 1b 8d d3 fd 8b b2 54 21 d3
+    python test_byte.py -m check -t 256 -f check.txt
+    result: The first line of Ciphertext(hex) : db 4f 1c 20 d6 52 2 c0 fe 51 3c 45 21 5b 23 a8
     ```
 
 
@@ -38,36 +44,28 @@
 
 | 测试项目     | 未优化版本用时(s) |
 | ----------- | ----------- |
-| SHA3-256(16K)    | 0.000948 | 
-| SHA3-512(16K)    | 0.156942 | 
-| SHA3-256(4M)    | 0.000687 | 
-| SHA3-512(4M)    | 0.119552 | 
+| AES-128(16K)    | 0.000948 | 
+| AES-192(16K)    | 0.000948 | 
+| AES-256(16K)    | 0.000948 | 
+| AES-128(4M)    | 0.000948 | 
+| AES-192(4M)    | 0.000948 | 
+| AES-256(4M)    | 0.000948 | 
+
 
 ## 仓库结构
 
-### SHA256.c/SHA256.h/SHA512.h/SHA512.h/SHACommon.h
+### AES-128_192_256.c
 
-SHA256.c/SHA256.h/SHA512.h/SHA512.h/SHACommon.h是实现算法的c语言程序。
+AES-128_192_256.c是实现AES算法的c语言程序。
 
-### main.c
+### check_algorithm.c
 
-main.c是测试主程序
+check_algorithm.c是使用OpenSSL生成密文的测试程序
 
 ### Makefile
 
-编译生成可执行文件sha
+编译生成可执行文件 AES-128_192_256
 
-### sha
-
-有比特流输入和字节流输入两种模式。比特流输入直接从控制台输入01字符串，解释为bit串。字节流输入从文件读取字符串，每个字符解释为一个字节。以下为示例：
-
-    比特流:./sha3 -m <method> -s <任意二进制串>
-        <method>: 
-            256 
-            512
-        <任意二进制串>: 只能输入01串，每个字符会被解释为1bit。
-    字节流:./sha3 -m <method> -f <文件名>
-        <文件名>: 字符串文件，每个字符会被解释为一个字节。
 
 ### test_example.py
 
@@ -75,7 +73,7 @@ main.c是测试主程序
 
 运行: 
     
-    python3 test_example.py -m 512 -f 16k.txt
+    python test_byte.py -m check -t 128 -f check.txt
 
 ### 16k.txt 4M.txt
 
